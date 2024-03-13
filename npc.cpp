@@ -44,11 +44,19 @@ int GetRandomNumberByRange(int, int);
 //TODO REMOVE LATER (This is for debugging)
 int main()
 {
-    srand(time(0));
     NPC testNPC("");
     cout << "Name: " << testNPC.GetName() << endl;
     cout << "Race: " << magic_enum::enum_name(testNPC.GetRace()) << endl;
+    cout << "Age: " << magic_enum::enum_name(testNPC.GetAge()) << endl;
+    cout << "Alignment: " << magic_enum::enum_name(testNPC.GetInclination()) << ' ' << magic_enum::enum_name(testNPC.GetMoral()) << endl;
+    cout << "Stats: " << testNPC.GetStat(Strength) << ", " << testNPC.GetStat(Dexterity) << ", " << testNPC.GetStat(Consitution) << ", " << testNPC.GetStat(Wisdom) << ", " << testNPC.GetStat(Intelligence)<< endl;
+    cout << "Physical Feature: " << testNPC.GetPhysicalFeature() << endl;
+    cout << "Talent: " << testNPC.GetTalent() << endl;
+    cout << "Mannerism: " << testNPC.GetMannerism() << endl;
+    cout << "Interaction Trait: " << testNPC.GetInteractionTrait() << endl;
     cout << "Ideal: " << testNPC.GetIdeal() << endl;
+    cout << "Bond: " << testNPC.GetBond() << endl;
+    cout << "Flaw: " << testNPC.GetFlaw() << endl;
     return 0;
 }
 
@@ -65,16 +73,15 @@ NPC::NPC(string npcName)
         cout << "Creating NPC" << endl;
         //Creates new randomized NPC
         age = (Ages)GetRandomNumberByRange(0, 2);
-        race = (Races)GetRandomNumberByRange(0, (int)RacesItemNumber);
+        race = (Races)GetRandomNumberByRange(0, (int)RacesItemNumber - 1);
         alignment.moral = (Moral)GetRandomNumberByRange(0, 2);
         alignment.inclination = (Inclination)GetRandomNumberByRange(0, 2);
-
         physicalFeature = physicalFeatures[GetRandomIndex(physicalFeatures.size())];
         talent = talents[GetRandomIndex(talents.size())];
         mannerism = mannerisms[GetRandomIndex(mannerisms.size())];
         interactionTrait = interactionTraits[GetRandomIndex(interactionTraits.size())];
         flaw = flaws[GetRandomIndex(flaws.size())];
-
+        bond = bonds[GetRandomIndex(bonds.size())];
         name = raceNames[(int)race][GetRandomIndex(raceNames[(int)race].size())];
 
         //Sets ideal based on alignment
@@ -88,7 +95,7 @@ NPC::NPC(string npcName)
         {
             ideal = GetRandomIdeal(alignment.inclination);
         }
-
+        
         //Populates stats array
         int highStat = GetRandomNumberByRange(0, 5);
         int lowStat = GetRandomNumberByRange(0, 5);
@@ -109,15 +116,15 @@ NPC::NPC(string npcName)
         {
             if (i == highStat)
             {
-                stats[i] = RollStat(1);
+                stats[i] = RollStat(2);
             }
             else if (i == lowStat)
             {
-                stats[i] = RollStat(-1);
+                stats[i] = RollStat(-2);
             }
             else
             {
-                stats[i] = RollStat(0);
+                stats[i] = RollStat();
             }
         }
 
@@ -205,7 +212,7 @@ int RollStat(int bonus)
     int currentRoll;
     for (int i = 0; i < 4; i++)
     {
-        currentRoll = GetRandomNumberByRange(0, 5);
+        currentRoll = GetRandomNumberByRange(1, 6);
         total += currentRoll;
         if (currentRoll < lowestRoll)
         {
@@ -265,7 +272,7 @@ int GetRandomNumberByRange(int minNum, int maxNum)
 
 #pragma region Getters
 
-int NPC::GetAge()
+Ages NPC::GetAge()
 {
     return age;
 }
