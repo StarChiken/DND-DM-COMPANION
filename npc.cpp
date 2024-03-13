@@ -4,11 +4,16 @@
 #include <vector>
 #include <iostream>
 #include <iomanip>
+#include <random>
 
 #include "libraries/magic_enum.hpp"
 #include "npc.h"
 
 using namespace std;
+
+//This creates a seed for the GetRandomNumberByRange function
+random_device randomDevice;
+mt19937 generator(randomDevice());
 
 bool hasInitializedVectors = false;
 
@@ -31,9 +36,10 @@ vector<vector<string>> raceNames;
 void InitializeNPCVectors();
 void SetVectorToFileContents(vector<string>&, string);
 int GetRandomIndex(int);
-int RollStat(int);
+int RollStat(int bonus = 0);
 string GetRandomIdeal(Moral);
 string GetRandomIdeal(Inclination);
+int GetRandomNumberByRange(int, int);
 
 //TODO REMOVE LATER (This is for debugging)
 int main()
@@ -46,7 +52,7 @@ int main()
     return 0;
 }
 
-NPC::NPC(string npcName = "")
+NPC::NPC(string npcName)
 {
     if (!hasInitializedVectors)
     {
@@ -58,10 +64,10 @@ NPC::NPC(string npcName = "")
     {
         cout << "Creating NPC" << endl;
         //Creates new randomized NPC
-        age = (Ages)(rand() % 3);
-        race = (Races)(rand() % (int)RacesItemNumber);
-        alignment.moral = (Moral)(rand() % 3);
-        alignment.inclination = (Inclination)(rand() % 3);
+        age = (Ages)GetRandomNumberByRange(0, 2);
+        race = (Races)GetRandomNumberByRange(0, (int)RacesItemNumber);
+        alignment.moral = (Moral)GetRandomNumberByRange(0, 2);
+        alignment.inclination = (Inclination)GetRandomNumberByRange(0, 2);
 
         physicalFeature = physicalFeatures[GetRandomIndex(physicalFeatures.size())];
         talent = talents[GetRandomIndex(talents.size())];
@@ -72,9 +78,9 @@ NPC::NPC(string npcName = "")
         name = raceNames[(int)race][GetRandomIndex(raceNames[(int)race].size())];
 
         //Sets ideal based on alignment
-        int moralIdeal = rand() % 10;
+        bool moralIdeal = GetRandomNumberByRange(0, 1);
 
-        if (moralIdeal >= 5)
+        if (moralIdeal)
         {
             ideal = GetRandomIdeal(alignment.moral);
         }
@@ -84,8 +90,8 @@ NPC::NPC(string npcName = "")
         }
 
         //Populates stats array
-        int highStat = rand() % 6;
-        int lowStat = rand() % 6;
+        int highStat = GetRandomNumberByRange(0, 5);
+        int lowStat = GetRandomNumberByRange(0, 5);
 
         if (highStat == lowStat)
         {
@@ -120,7 +126,7 @@ NPC::NPC(string npcName = "")
     else
     {
         //Finds and reads NPC file by name
-        //For NPC Archive (Will Do Later)
+        //For NPC archive (Will Do Later)
     }
 }
 
@@ -158,11 +164,6 @@ void InitializeNPCVectors()
 
         vector<string> nameVect;
         SetVectorToFileContents(nameVect, filePath);
-        for (int i = 0; i < nameVect.size(); i++)
-        {
-            cout << nameVect[i] << ", ";
-        }
-        cout << '\n' << endl;
         raceNames.push_back(nameVect);
     }
 }
@@ -188,21 +189,23 @@ void SetVectorToFileContents(vector<string>& inputVect, string filePath)
     {
         inputVect.push_back(currentInput);
     }
+
+    inputFile.close();
 }
 
 int GetRandomIndex(int sizeOfArray)
 {
-    return rand() % sizeOfArray;
+    return GetRandomNumberByRange(0, sizeOfArray - 1);
 }
 
-int RollStat(int bonus = 0)
+int RollStat(int bonus)
 {
     int total = 0;
     int lowestRoll = 10;
     int currentRoll;
     for (int i = 0; i < 4; i++)
     {
-        currentRoll = rand() % 6;
+        currentRoll = GetRandomNumberByRange(0, 5);
         total += currentRoll;
         if (currentRoll < lowestRoll)
         {
@@ -251,6 +254,13 @@ string GetRandomIdeal(Inclination inclination)
     }
 
     return ideal;
+}
+
+int GetRandomNumberByRange(int minNum, int maxNum)
+{
+    //Gets a random number in the given range (inclusive)
+    uniform_int_distribution<int> distribution(minNum, maxNum);
+    return distribution(generator);
 }
 
 #pragma region Getters

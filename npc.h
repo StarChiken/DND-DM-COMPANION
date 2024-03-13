@@ -88,11 +88,11 @@ class NPC
 
 
     public: // * These are accessable outside the class
-        NPC(string); //Class constructor
+        NPC(string npcName = ""); //Class constructor
         //Getter Functions (There are *a lot* of getter functions [erm actually methods bc they are in a class])
         int GetAge();
         Races GetRace();
-        int GetStat(StatTypes);
+        int GetStat(StatTypes statType = Strength);
         Alignment GetAlignment();
         Moral GetMoral();
         Inclination GetInclination();
