@@ -1,0 +1,8 @@
+#Ignoring VS Code compile files
+*.exe
+*.dSYM
+*.DS_Store
+
+#These are specific to my machine
+/.vscode
+debugtest.cpp
