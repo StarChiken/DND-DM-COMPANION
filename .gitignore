@@ -2,6 +2,7 @@
 *.exe
 *.dSYM
 *.DS_Store
+*.out
 
 #Ignoring files created by the program
 *.log

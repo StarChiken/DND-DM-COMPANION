@@ -71,7 +71,7 @@ void NPC::GenerateNPC()
     PrintToLog(agePrint);
     
     race = (Races)GetRandomNumberByRange(0, (int)RacesItemNumber - 1);
-    string racePrint = "set age to: ";
+    string racePrint = "set race to: ";
     racePrint += magic_enum::enum_name(race);
     PrintToLog(racePrint);
     
