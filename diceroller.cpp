@@ -6,7 +6,7 @@ using namespace std;
 
 // function definition for D4 dice
 int D4Roll(int numberOfRolls) {
-    int total;
+    int total = 0;
     int diceRoll;
 
     // loop iterating the amount of rolls a user wants
@@ -20,7 +20,7 @@ int D4Roll(int numberOfRolls) {
 
 // function definition for D6 dice
 int D6Roll(int numberOfRolls) {
-    int total;
+    int total = 0;
     int diceRoll;
 
     // loop iterating the amount of rolls a user wants
@@ -34,7 +34,7 @@ int D6Roll(int numberOfRolls) {
 
 // function definition for D8 dice
 int D8Roll(int numberOfRolls) {
-    int total;
+    int total = 0;
     int diceRoll;
 
     // loop iterating the amount of rolls a user wants
@@ -48,7 +48,7 @@ int D8Roll(int numberOfRolls) {
 
 // function definition for D10 dice
 int D10Roll(int numberOfRolls) {
-    int total;
+    int total = 0;
     int diceRoll;
 
     // loop iterating the amount of rolls a user wants
@@ -62,7 +62,7 @@ int D10Roll(int numberOfRolls) {
 
 // function definition for D12 dice
 int D12Roll(int numberOfRolls) {
-    int total;
+    int total = 0;
     int diceRoll;
 
     // loop iterating the amount of rolls a user wants
@@ -76,7 +76,7 @@ int D12Roll(int numberOfRolls) {
 
 // function definition for D20 dice
 int D20Roll(int numberOfRolls) {
-    int total;
+    int total = 0;
     int diceRoll;
 
     // loop iterating the amount of rolls a user wants
@@ -90,7 +90,7 @@ int D20Roll(int numberOfRolls) {
 
 // function definition for D100 dice
 int D100Roll(int numberOfRolls) {
-    int total;
+    int total = 0;
     int diceRoll;
 
     // loop iterating the amount of rolls a user wants
