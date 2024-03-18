@@ -86,9 +86,12 @@ class NPC
         string bond;
         string flaw;
 
+        void GenerateNPC();
+
 
     public: // * These are accessable outside the class
         NPC(string npcName = ""); //Class constructor
+        bool SaveNPC();
         //Getter Functions (There are *a lot* of getter functions [erm actually methods bc they are in a class])
         Ages GetAge();
         Races GetRace();

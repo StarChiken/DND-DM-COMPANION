@@ -3,6 +3,10 @@
 *.dSYM
 *.DS_Store
 
+#Ignoring files created by the program
+*.log
+*.npc
+
 #These are specific to my machine
 /.vscode
 debugtest.cpp

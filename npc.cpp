@@ -1,12 +1,12 @@
+#include <iostream>
 #include <time.h>
-#include <cstdlib>
 #include <fstream>
 #include <vector>
-#include <iostream>
 #include <iomanip>
 #include <random>
 
 #include "libraries/magic_enum.hpp"
+#include "logger.h"
 #include "npc.h"
 
 using namespace std;
@@ -41,25 +41,6 @@ string GetRandomIdeal(Moral);
 string GetRandomIdeal(Inclination);
 int GetRandomNumberByRange(int, int);
 
-//TODO REMOVE LATER (This is for debugging)
-int main()
-{
-    NPC testNPC("");
-    cout << "Name: " << testNPC.GetName() << endl;
-    cout << "Race: " << magic_enum::enum_name(testNPC.GetRace()) << endl;
-    cout << "Age: " << magic_enum::enum_name(testNPC.GetAge()) << endl;
-    cout << "Alignment: " << magic_enum::enum_name(testNPC.GetInclination()) << ' ' << magic_enum::enum_name(testNPC.GetMoral()) << endl;
-    cout << "Stats: " << testNPC.GetStat(Strength) << ", " << testNPC.GetStat(Dexterity) << ", " << testNPC.GetStat(Consitution) << ", " << testNPC.GetStat(Wisdom) << ", " << testNPC.GetStat(Intelligence)<< endl;
-    cout << "Physical Feature: " << testNPC.GetPhysicalFeature() << endl;
-    cout << "Talent: " << testNPC.GetTalent() << endl;
-    cout << "Mannerism: " << testNPC.GetMannerism() << endl;
-    cout << "Interaction Trait: " << testNPC.GetInteractionTrait() << endl;
-    cout << "Ideal: " << testNPC.GetIdeal() << endl;
-    cout << "Bond: " << testNPC.GetBond() << endl;
-    cout << "Flaw: " << testNPC.GetFlaw() << endl;
-    return 0;
-}
-
 NPC::NPC(string npcName)
 {
     if (!hasInitializedVectors)
@@ -70,65 +51,7 @@ NPC::NPC(string npcName)
 
     if (npcName == "")
     {
-        cout << "Creating NPC" << endl;
-        //Creates new randomized NPC
-        age = (Ages)GetRandomNumberByRange(0, 2);
-        race = (Races)GetRandomNumberByRange(0, (int)RacesItemNumber - 1);
-        alignment.moral = (Moral)GetRandomNumberByRange(0, 2);
-        alignment.inclination = (Inclination)GetRandomNumberByRange(0, 2);
-        physicalFeature = physicalFeatures[GetRandomIndex(physicalFeatures.size())];
-        talent = talents[GetRandomIndex(talents.size())];
-        mannerism = mannerisms[GetRandomIndex(mannerisms.size())];
-        interactionTrait = interactionTraits[GetRandomIndex(interactionTraits.size())];
-        flaw = flaws[GetRandomIndex(flaws.size())];
-        bond = bonds[GetRandomIndex(bonds.size())];
-        name = raceNames[(int)race][GetRandomIndex(raceNames[(int)race].size())];
-
-        //Sets ideal based on alignment
-        bool moralIdeal = GetRandomNumberByRange(0, 1);
-
-        if (moralIdeal)
-        {
-            ideal = GetRandomIdeal(alignment.moral);
-        }
-        else
-        {
-            ideal = GetRandomIdeal(alignment.inclination);
-        }
-        
-        //Populates stats array
-        int highStat = GetRandomNumberByRange(0, 5);
-        int lowStat = GetRandomNumberByRange(0, 5);
-
-        if (highStat == lowStat)
-        {
-            if (highStat == 0)
-            {
-                lowStat++;
-            }
-            else
-            {
-                lowStat--;
-            }
-        }
-
-        for (int i = 0; i < 6; i++)
-        {
-            if (i == highStat)
-            {
-                stats[i] = RollStat(2);
-            }
-            else if (i == lowStat)
-            {
-                stats[i] = RollStat(-2);
-            }
-            else
-            {
-                stats[i] = RollStat();
-            }
-        }
-
-        cout << "NPC Created\n" << endl;
+        GenerateNPC();
     }
     else
     {
@@ -137,8 +60,104 @@ NPC::NPC(string npcName)
     }
 }
 
+void NPC::GenerateNPC()
+{
+    PrintToLog("creating randomized npc");
+    
+    //Creates new randomized NPC
+    age = (Ages)GetRandomNumberByRange(0, 2);
+    string agePrint = "set age to: ";
+    agePrint += magic_enum::enum_name(age);
+    PrintToLog(agePrint);
+    
+    race = (Races)GetRandomNumberByRange(0, (int)RacesItemNumber - 1);
+    string racePrint = "set age to: ";
+    racePrint += magic_enum::enum_name(race);
+    PrintToLog(racePrint);
+    
+    alignment.moral = (Moral)GetRandomNumberByRange(0, 2);
+    alignment.inclination = (Inclination)GetRandomNumberByRange(0, 2);
+    string alignmentPrint = "set alignment to: ";
+    alignmentPrint += magic_enum::enum_name(alignment.inclination);
+    alignmentPrint += ' ';
+    alignmentPrint += magic_enum::enum_name(alignment.moral);
+    PrintToLog(alignmentPrint);
+    
+    physicalFeature = physicalFeatures[GetRandomIndex(physicalFeatures.size())];
+    PrintToLog("set physicalFeature to: " + physicalFeature);
+    
+    talent = talents[GetRandomIndex(talents.size())];
+    PrintToLog("set talent to: " + talent);
+    
+    mannerism = mannerisms[GetRandomIndex(mannerisms.size())];   
+    PrintToLog("set mannerism to: " + mannerism);
+
+    interactionTrait = interactionTraits[GetRandomIndex(interactionTraits.size())];
+    PrintToLog("set interactionTrait to: " + interactionTrait);
+    
+    flaw = flaws[GetRandomIndex(flaws.size())];
+    PrintToLog("set flaw to: " + flaw);
+    
+    bond = bonds[GetRandomIndex(bonds.size())];
+    PrintToLog("set bond to: " + bond);
+    
+    name = raceNames[(int)race][GetRandomIndex(raceNames[(int)race].size())];
+    PrintToLog("set name to: " + name);
+
+    //Sets ideal based on alignment
+    bool moralIdeal = GetRandomNumberByRange(0, 1);
+
+    if (moralIdeal)
+    {
+        ideal = GetRandomIdeal(alignment.moral);
+    }
+    else
+    {
+        ideal = GetRandomIdeal(alignment.inclination);
+    }
+
+    PrintToLog("set ideal to: " + ideal);
+    
+    //Populates stats array
+    int highStat = GetRandomNumberByRange(0, 5);
+    int lowStat = GetRandomNumberByRange(0, 5);
+
+    if (highStat == lowStat)
+    {
+        if (highStat == 0)
+        {
+            lowStat++;
+        }
+        else
+        {
+            lowStat--;
+        }
+    }
+
+    for (int i = 0; i < 6; i++)
+    {
+        if (i == highStat)
+        {
+            stats[i] = RollStat(2);
+        }
+        else if (i == lowStat)
+        {
+            stats[i] = RollStat(-2);
+        }
+        else
+        {
+            stats[i] = RollStat();
+        }
+        PrintToLog("set stat[" + to_string(i) + "] to: " + to_string(stats[i]));
+    }
+
+    PrintToLog("npc created");
+}
+
 void InitializeNPCVectors()
 {
+    PrintToLog("initializing vectors");
+
     SetVectorToFileContents(physicalFeatures, "resources/physicalFeatures.txt");
     SetVectorToFileContents(talents, "resources/talents.txt");
     SetVectorToFileContents(mannerisms, "resources/mannerisms.txt");
@@ -167,12 +186,14 @@ void InitializeNPCVectors()
         string filePath = "resources/names/";
         filePath += enumName;
         filePath[16] = tolower(filePath[16]);
-        filePath += "Names";
+        filePath += "Names.txt";
 
         vector<string> nameVect;
         SetVectorToFileContents(nameVect, filePath);
         raceNames.push_back(nameVect);
     }
+
+    PrintToLog("finished initializing vectors");
 }
 
 void SetVectorToFileContents(vector<string>& inputVect, string filePath)
@@ -182,13 +203,13 @@ void SetVectorToFileContents(vector<string>& inputVect, string filePath)
 
     if (!inputFile.good()) //Checks if the file exists
     {
-        cout << "File Path: \"" << filePath << "\" Does Not Exist" << endl;
+        PrintToLog("file path: \"" + filePath + "\" does not exist", true);
         return;
     }
     
     if (inputFile.peek() == ifstream::traits_type::eof()) //Checks if the file is empty
     {
-        cout << "File: \"" << filePath << "\" Is Empty" << endl;
+        PrintToLog("file: \"" + filePath + "\" is empty", true);
         return;
     }
 
@@ -198,6 +219,7 @@ void SetVectorToFileContents(vector<string>& inputVect, string filePath)
     }
 
     inputFile.close();
+    PrintToLog("filled vector with path contents: " + filePath);
 }
 
 int GetRandomIndex(int sizeOfArray)
