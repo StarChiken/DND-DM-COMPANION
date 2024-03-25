@@ -3,17 +3,12 @@
 #include <fstream>
 #include <vector>
 #include <iomanip>
-#include <random>
 
 #include "libraries/magic_enum.hpp"
 #include "logger.h"
 #include "npc.h"
 
 using namespace std;
-
-//This creates a seed for the GetRandomNumberByRange function
-random_device randomDevice;
-mt19937 generator(randomDevice());
 
 bool hasInitializedVectors = false;
 
@@ -283,13 +278,6 @@ string GetRandomIdeal(Inclination inclination)
     }
 
     return ideal;
-}
-
-int GetRandomNumberByRange(int minNum, int maxNum)
-{
-    //Gets a random number in the given range (inclusive)
-    uniform_int_distribution<int> distribution(minNum, maxNum);
-    return distribution(generator);
 }
 
 #pragma region Getters
