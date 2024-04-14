@@ -100,7 +100,7 @@ int main() {
 
     // Gets user inputs
     int desiredCR, enemyCount;
-    cout << "Enter the desired challenge rating for the enemies: ";
+    cout << "Enter the desired challenge rating for the enemies (1-10): ";
     cin >> desiredCR;
     cout << "Enter the desired enemy count: ";
     cin >> enemyCount;
