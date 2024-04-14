@@ -10,15 +10,6 @@ int random(int min, int max) {
     return min + rand() % (max - min + 1);
 }
 
-// Function to calculate the difficulty of the encounter based on enemy challenge ratings
-int calculateDifficulty(const vector<string>& selectedEnemies, const map<string, int>& enemies) {
-    int totalEnemyChallengeRating = 0;
-    for (size_t i = 0; i < selectedEnemies.size(); ++i) {
-        totalEnemyChallengeRating += enemies.at(selectedEnemies[i]);
-    }
-    return totalEnemyChallengeRating;
-}
-
 // Function to generate a random encounter based on desired challenge rating and enemy count
 void generateEncounter(int desiredCR, int enemyCount, const map<string, int>& enemies) {
     // Output the encounter details
