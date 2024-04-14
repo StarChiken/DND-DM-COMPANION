@@ -1,3 +1,4 @@
+#pragma once
 #include <iostream>
 
 using namespace std;
@@ -9,3 +10,4 @@ This system is for debugging
 
 void InitializeLogger();
 void PrintToLog(string_view inputString, bool isError = false);
+void CloseLogger();

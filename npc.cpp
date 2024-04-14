@@ -3,8 +3,10 @@
 #include <fstream>
 #include <vector>
 #include <iomanip>
+#include <sys/stat.h>
 
 #include "libraries/magic_enum.hpp"
+#include "randomnumbers.hpp"
 #include "logger.h"
 #include "npc.h"
 
@@ -28,34 +30,13 @@ vector<string> otherIdeals;
 //This is a 2 dimensional vector
 vector<vector<string>> raceNames;
 
-void InitializeNPCVectors();
 void SetVectorToFileContents(vector<string>&, string);
 int GetRandomIndex(int);
 int RollStat(int bonus = 0);
 string GetRandomIdeal(Moral);
 string GetRandomIdeal(Inclination);
-int GetRandomNumberByRange(int, int);
 
-NPC::NPC(string npcName)
-{
-    if (!hasInitializedVectors)
-    {
-        InitializeNPCVectors();
-        hasInitializedVectors = true;
-    }
-
-    if (npcName == "")
-    {
-        GenerateNPC();
-    }
-    else
-    {
-        //Finds and reads NPC file by name
-        //For NPC archive (Will Do Later)
-    }
-}
-
-void NPC::GenerateNPC()
+void NPC::GenerateRandomNPC()
 {
     PrintToLog("creating randomized npc");
     
@@ -278,6 +259,163 @@ string GetRandomIdeal(Inclination inclination)
     }
 
     return ideal;
+}
+
+bool NPC::LoadNPC(string npcName)
+{
+    PrintToLog("Started loading NPC: " + npcName);
+
+    ifstream npcFile("npcs/" + npcName + ".npc");
+    if (!npcFile.good())
+    {
+        PrintToLog("npcs/" + npcName + ".npc does not exist");
+        return false;
+    }
+
+    name = npcName;
+
+    int iterations = 0;
+    while(true)
+    {
+        string type = "";
+        while (true)
+        {
+            char c;
+            npcFile >> c;
+            if (c == ':') break;
+            else type += c;
+        }
+
+        if (type == "age")
+        {
+            int value;
+            npcFile >> value;
+            age = (Ages)value;
+        }
+        else if (type == "race")
+        {
+            int value;
+            npcFile >> value;
+            race = (Races)value;
+        }
+        else if (type == "alignment")
+        {
+            int value;
+            npcFile >> value;
+            alignment.inclination = (Inclination)value;
+            
+            npcFile >> value;
+            alignment.moral = (Moral)value;
+        }
+        else if (type == "stats")
+        {
+            for (int i = 0; i < 6; i++)
+            {
+                npcFile >> stats[i];
+            }
+        }
+        else if (type == "physicalFeature")
+        {
+            getline(npcFile, physicalFeature);
+        }
+        else if (type == "talent")
+        {
+            getline(npcFile, talent);
+        }
+        else if (type == "mannerism")
+        {
+            getline(npcFile, mannerism);
+        }
+        else if (type == "interactionTrait")
+        {
+            getline(npcFile, interactionTrait);
+        }
+        else if (type == "ideal")
+        {
+            getline(npcFile, ideal);
+        }
+        else if (type == "bond")
+        {
+            getline(npcFile, bond);
+        }
+        else if (type == "flaw")
+        {
+            getline(npcFile, flaw);
+        }
+
+        if(npcFile.eof())
+        {
+            break;
+        }
+
+        PrintToLog("Loaded: " + type);
+
+        iterations++;
+        if (iterations > 300)
+        {
+            PrintToLog("Infinite loop while loading npc", true);
+            break;
+        }
+    }
+
+    npcFile.close();
+    PrintToLog("Finised loading NPC: " + name);
+    return true;
+}
+
+bool NPC::SaveNPC()
+{
+    PrintToLog("Started saving NPC: " + name);
+
+    ofstream npcFile("npcs/" + name + ".npc");
+
+    if (!npcFile.good())
+    {
+        PrintToLog("Unable to save " + name + "(bad file)", true);
+        return false;
+    }
+
+    npcFile << "age:" << age << '\n';
+    npcFile << "race:" << race << '\n';
+    npcFile << "alignment:" << alignment.inclination << ' ' << alignment.moral << '\n';
+    npcFile << "stats:" << stats[0] << ' ' << stats[1] << ' ' << stats[2] << ' ' << stats[3] << ' ' << stats[4] << ' ' << stats[5] << '\n';
+    npcFile << "physicalFeature:" << physicalFeature << '\n';
+    npcFile << "talent:" << talent << '\n';
+    npcFile << "mannerism:" << mannerism << '\n';
+    npcFile << "interactionTrait:" << interactionTrait << '\n';
+    npcFile << "ideal:" << ideal << '\n';
+    npcFile << "bond:" << bond << '\n';
+    npcFile << "flaw:" << flaw << '\n';
+    npcFile << "notes:";
+    if (notes.size() > 0)
+    {
+        for (int i = 0; i < notes.size(); i++)
+        {
+            npcFile << notes[i];
+            if (i + 2 != notes.size()) npcFile << ',';
+        }
+    }
+
+    npcFile.close();
+    PrintToLog("Finished saving npc to: npcs/" + name + ".npc");
+    return true;
+}
+
+void NPC::PrintNPCSheet()
+{
+    string upperName = "";
+    for (int i = 0; i < name.length(); i++) upperName += toupper(name[i]);
+    cout << "\n==" << upperName << "==" << endl;
+    cout << "Age: " << magic_enum::enum_name(age) << endl;
+    cout << "Race: " << magic_enum::enum_name(race) << endl;
+    cout << "Alignment" << magic_enum::enum_name(alignment.inclination) << ' ' << magic_enum::enum_name(alignment.moral) << endl;
+    cout << "Stats:" << "\n  STR: " << stats[0] << "\n  DEX: " << stats[1] << "\n  CON: " << stats[2] << "\n  INT: " << stats[3] << "\n  WIS: " << stats[4] << "\n  CHA: " << stats[5] << endl;
+    cout << "Physical Feature: " << physicalFeature << endl;
+    cout << "Talent: " << talent << endl;
+    cout << "Mannerism: " << mannerism << endl;
+    cout << "Interaction Trait: " << interactionTrait << endl;
+    cout << "Ideal: " << ideal << endl;
+    cout << "Bond: " << bond << endl;
 }
 
 #pragma region Getters

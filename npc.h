@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <vector>
 
 using namespace std;
 
@@ -85,13 +86,13 @@ class NPC
         string ideal;
         string bond;
         string flaw;
-
-        void GenerateNPC();
-
+        vector<string> notes;
 
     public: // * These are accessable outside the class
-        NPC(string npcName = ""); //Class constructor
+        void GenerateRandomNPC();
         bool SaveNPC();
+        bool LoadNPC(string npcName);
+        void PrintNPCSheet();
         //Getter Functions (There are *a lot* of getter functions [erm actually methods bc they are in a class])
         Ages GetAge();
         Races GetRace();
@@ -108,3 +109,5 @@ class NPC
         string GetBond();
         string GetFlaw();
 };
+
+void InitializeNPCVectors();

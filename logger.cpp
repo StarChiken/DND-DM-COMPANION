@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <chrono>
+#include <sys/stat.h>
 
 #include "logger.h"
 
@@ -15,6 +16,8 @@ string lastLogTime;
 
 void InitializeLogger()
 {
+    mkdir("logs");
+
     string filePath = "logs/log_";
     filePath += GetCurrentLogTime();
     filePath += ".log";
@@ -42,7 +45,18 @@ void PrintToLog(string_view inputString, bool isError)
         logFile << outputString << inputString << endl;
         
         lastLogTime = currentLogTime;
+
+        if (isError)
+        {
+            cout << "ERROR: " << inputString << endl;
+        }
     }
+}
+
+void CloseLogger()
+{
+    logFile.close();
+    fileOpen = false;
 }
 
 string GetCurrentLogTime()
