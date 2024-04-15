@@ -1,3 +1,5 @@
+**LINK TO GITHUB:** https://github.com/StarChiken/DND-DM-COMPANION
+
 # **DND-DM-COMPANION README**
 **DISCLAIMER: This project has a lot of removed code. My partner for the project cheated and I was forced to remove all of their work.**
 All code written by: Ethan Brandt
