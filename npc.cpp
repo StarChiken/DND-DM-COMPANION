@@ -399,7 +399,7 @@ void NPC::PrintNPCSheet()
     cout << "\n==" << upperName << "==" << endl;
     cout << "Age: " << magic_enum::enum_name(age) << endl;
     cout << "Race: " << magic_enum::enum_name(race) << endl;
-    cout << "Alignment" << magic_enum::enum_name(alignment.inclination) << ' ' << magic_enum::enum_name(alignment.moral) << endl;
+    cout << "Alignment: " << magic_enum::enum_name(alignment.inclination) << ' ' << magic_enum::enum_name(alignment.moral) << endl;
     cout << "Stats:" << "\n  STR: " << stats[0] << "\n  DEX: " << stats[1] << "\n  CON: " << stats[2] << "\n  INT: " << stats[3] << "\n  WIS: " << stats[4] << "\n  CHA: " << stats[5] << endl;
     cout << "Physical Feature: " << physicalFeature << endl;
     cout << "Talent: " << talent << endl;

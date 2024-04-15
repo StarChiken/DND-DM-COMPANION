@@ -238,6 +238,7 @@ void NPCInterface()
         {
             cout << "Enter NPC Name: ";
             string npcName;
+            cin.ignore();
             getline(cin, npcName);
 
             isLoaded = selectedNPC.LoadNPC(npcName);
@@ -252,6 +253,8 @@ void NPCInterface()
                 if (npcName == "Back") break;
                 isLoaded = selectedNPC.LoadNPC(npcName);
             }
+
+            cout << npcName << " Loaded Successfully" << endl;
         }
         else if (helperOption == 4) break;
 
