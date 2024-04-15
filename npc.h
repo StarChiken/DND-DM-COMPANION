@@ -8,8 +8,6 @@ using namespace std;
 /*
 #NOTES#
 I am using a class because the alternative are a lot of parellel arrays.
-
-* All variables are private and I am using getter methods so that the variables cannot be changed outside the class.
 */
 
 #pragma region Data Types
@@ -71,9 +69,7 @@ struct Alignment
 
 class NPC
 {
-    private: // * These are not accessable outside the class
-        //I always order my variables from least memory to most
-        //I have no idea why I do this but I have for 9 years ¯\_(ツ)_/¯
+    public: // * These are accessable outside the class
         Ages age;
         Races race;
         Alignment alignment;
@@ -86,28 +82,11 @@ class NPC
         string ideal;
         string bond;
         string flaw;
-        vector<string> notes;
 
-    public: // * These are accessable outside the class
         void GenerateRandomNPC();
         bool SaveNPC();
         bool LoadNPC(string npcName);
         void PrintNPCSheet();
-        //Getter Functions (There are *a lot* of getter functions [erm actually methods bc they are in a class])
-        Ages GetAge();
-        Races GetRace();
-        int GetStat(StatTypes statType = Strength);
-        Alignment GetAlignment();
-        Moral GetMoral();
-        Inclination GetInclination();
-        string GetName();
-        string GetPhysicalFeature();
-        string GetTalent();
-        string GetMannerism();
-        string GetInteractionTrait();
-        string GetIdeal();
-        string GetBond();
-        string GetFlaw();
 };
 
 void InitializeNPCVectors();

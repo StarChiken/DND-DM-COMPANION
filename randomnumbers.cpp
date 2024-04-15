@@ -1,6 +1,6 @@
 #include <random>
 
-using namespace std;
+#include "randomnumbers.h"
 
 //This creates a seed for the GetRandomNumberByRange function
 random_device randomDevice;

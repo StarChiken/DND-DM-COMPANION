@@ -6,7 +6,7 @@
 #include <sys/stat.h>
 
 #include "libraries/magic_enum.hpp"
-#include "randomnumbers.hpp"
+#include "randomnumbers.h"
 #include "logger.h"
 #include "npc.h"
 
@@ -386,15 +386,6 @@ bool NPC::SaveNPC()
     npcFile << "ideal:" << ideal << '\n';
     npcFile << "bond:" << bond << '\n';
     npcFile << "flaw:" << flaw << '\n';
-    npcFile << "notes:";
-    if (notes.size() > 0)
-    {
-        for (int i = 0; i < notes.size(); i++)
-        {
-            npcFile << notes[i];
-            if (i + 2 != notes.size()) npcFile << ',';
-        }
-    }
 
     npcFile.close();
     PrintToLog("Finished saving npc to: npcs/" + name + ".npc");
@@ -417,77 +408,3 @@ void NPC::PrintNPCSheet()
     cout << "Ideal: " << ideal << endl;
     cout << "Bond: " << bond << endl;
 }
-
-#pragma region Getters
-
-Ages NPC::GetAge()
-{
-    return age;
-}
-
-Races NPC::GetRace()
-{
-    return race;
-}
-
-int NPC::GetStat(StatTypes statType)
-{
-    return stats[statType];
-}
-
-Alignment NPC::GetAlignment()
-{
-    return alignment;
-}
-
-Moral NPC::GetMoral()
-{
-    return alignment.moral;
-}
-
-Inclination NPC::GetInclination()
-{
-    return alignment.inclination;
-}
-
-string NPC::GetName()
-{
-    return name;
-}
-
-string NPC::GetPhysicalFeature()
-{
-    return physicalFeature;
-}
-
-string NPC::GetTalent()
-{
-    return talent;
-}
-
-string NPC::GetMannerism()
-{
-    return mannerism;
-}
-
-string NPC::GetInteractionTrait()
-{
-    return interactionTrait;
-}
-
-string NPC::GetIdeal()
-{
-    return ideal;
-}
-
-string NPC::GetBond()
-{
-    return bond;
-}
-
-string NPC::GetFlaw()
-{
-    return flaw;
-}
-
-#pragma endregion

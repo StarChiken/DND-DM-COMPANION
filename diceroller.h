@@ -1,13 +1,14 @@
-#ifndef diceroller_h // guard
-#define diceroller_h
+#pragma once
 
-// function prototype declarations
-int D4Roll(int numberOfRolls);
-int D6Roll(int numberOfRolls);
-int D8Roll(int numberOfRolls);
-int D10Roll(int numberOfRolls);
-int D12Roll(int numberOfRolls);
-int D20Roll(int numberOfRolls);
-int D100Roll(int numberOfRolls);
+enum Dice
+{
+    D4 = 4,
+    D6 = 6,
+    D8 = 8,
+    D10 = 10,
+    D12 = 12,
+    D20 = 20,
+    D100 = 100
+};
 
-#endif
+int RollDice(Dice, int);
